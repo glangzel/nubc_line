@@ -1,42 +1,65 @@
-function reply_message(e) {
+var que; //質問文の文字列を代入する変数。
+
+function yesorno(e) { 
+  //「確定しますか?」と聞き、「はい」と「いいえ」のボタン選択肢を表示するプログラム。
+  // ボタンを押すか、テキストを入力して送信すると、ボタン上のテキストか入力したテキストが送信される。
   var postData = {
     "replyToken": e.replyToken,
     "messages": [{
       "type": "text",
-      "text": "こんにちは!\nここではイベント参加の予約、確認が行えます。\nまた「実施日を見る」では、イベントのスケジュールカレンダーが見られます。",
+      "text": "確定しますか?", 
       "quickReply": {
         "items": [{
           "type": "action",
           "action": {
             "type": "message",
-            "label": "予約する",
-            "text": "予約する"
+            "label": "はい",
+            "text": "はい"
           }
         },
                   {
                     "type": "action",
                     "action": {
                       "type": "message",
-                      "label": "予約を調べる",
-                      "text": "予約を調べる"
-                    }
-                  },
-                  {
-                    "type": "action",
-                    "action": {
-                      "type": "message",
-                      "label": "予約を取り消す",
-                      "text": "予約を取り消す"
-                    }
-                  },
-                  {
-                    "type": "action",
-                    "action": {
-                      "type": "message",
-                      "label": "実施日を見る",
-                      "text": "実施日を見る"
+                      "label": "いいえ",
+                      "text": "いいえ"
                     }
                   }
+                 ]
+      }
+    }
+                 
+                ]
+  };
+  
+  // 送信するためのLINE APIの設定。
+  var options = {
+    "method": "post",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + CHANNEL_ACCESS_TOKEN
+    },
+    "payload": JSON.stringify(postData)
+  };
+  UrlFetchApp.fetch("https://api.line.me/v2/bot/message/reply", options);
+}
+
+
+function question(e,que) { //変数queに格納された文字列の内容を表示し、「特になし」のボタン選択肢を表示するプログラム。
+  var postData = {
+    "replyToken": e.replyToken,
+    "messages": [{
+      "type": "text",
+      "text": que,
+      "quickReply": {
+        "items": [{
+          "type": "action",
+          "action": {
+            "type": "message",
+            "label": "特になし",
+            "text": "特になし"
+          }
+        }
                  ]
       }
     }
